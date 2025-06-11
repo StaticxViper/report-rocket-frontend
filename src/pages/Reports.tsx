@@ -75,7 +75,7 @@ export default function Reports() {
       <div className="p-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2">My Reports</h1>
+            <h1 className="text-3xl font-bold mb-2">Property Reports</h1>
             <p className="text-muted-foreground">
               View and manage all your property reports
             </p>
@@ -164,38 +164,6 @@ export default function Reports() {
                   </Button>
                 </Link>
               )}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Summary Stats */}
-        {filteredReports.length > 0 && (
-          <Card className="mt-8">
-            <CardContent className="p-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                <div>
-                  <div className="text-2xl font-bold">{reports.length}</div>
-                  <div className="text-sm text-muted-foreground">Total Reports</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-green-600">
-                    {reports.filter(r => r.status === 'completed').length}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Completed</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-yellow-600">
-                    {reports.filter(r => r.status === 'processing').length}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Processing</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-red-600">
-                    {reports.filter(r => r.status === 'failed').length}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Failed</div>
-                </div>
-              </div>
             </CardContent>
           </Card>
         )}

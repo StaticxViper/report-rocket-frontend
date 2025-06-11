@@ -9,13 +9,15 @@ import {
   CreditCard, 
   ChevronLeft,
   Building2,
-  User
+  User,
+  Heart
 } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: Home },
   { name: 'Generate Report', href: '/generate', icon: FileText },
-  { name: 'My Reports', href: '/reports', icon: Building2 },
+  { name: 'Property Reports', href: '/reports', icon: Building2 },
+  { name: 'Favorites', href: '/favorites', icon: Heart },
   { name: 'Account Settings', href: '/settings', icon: User },
   { name: 'Billing', href: '/billing', icon: CreditCard },
 ];
@@ -73,10 +75,13 @@ export function Sidebar() {
 
       {/* User section */}
       <div className="p-4 border-t border-border">
-        <div className={cn(
-          "flex items-center",
-          collapsed ? "justify-center" : "space-x-3"
-        )}>
+        <Link
+          to="/settings"
+          className={cn(
+            "flex items-center rounded-lg p-2 hover:bg-accent transition-colors",
+            collapsed ? "justify-center" : "space-x-3"
+          )}
+        >
           <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
             <User className="h-4 w-4 text-primary-foreground" />
           </div>
@@ -86,7 +91,7 @@ export function Sidebar() {
               <p className="text-xs text-muted-foreground">Pro Plan</p>
             </div>
           )}
-        </div>
+        </Link>
       </div>
     </div>
   );

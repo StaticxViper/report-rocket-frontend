@@ -4,7 +4,7 @@ import { StatsCard } from '@/components/dashboard/StatsCard';
 import { ReportCard } from '@/components/reports/ReportCard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { FileText, Building2, TrendingUp, Clock, Plus, ArrowRight } from 'lucide-react';
+import { FileText, Building2, Clock, Plus, ArrowRight, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -52,7 +52,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatsCard
             title="Total Reports"
             value="24"
@@ -65,13 +65,6 @@ export default function Dashboard() {
             value="18"
             description="Unique addresses"
             icon={Building2}
-          />
-          <StatsCard
-            title="Success Rate"
-            value="98.5%"
-            description="Report accuracy"
-            icon={TrendingUp}
-            trend={{ value: "2.1%", positive: true }}
           />
           <StatsCard
             title="Avg. Generation Time"
@@ -119,7 +112,7 @@ export default function Dashboard() {
               <Link to="/settings">
                 <Card className="hover:bg-accent transition-colors cursor-pointer">
                   <CardContent className="p-6 text-center">
-                    <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
+                    <User className="h-8 w-8 mx-auto mb-2 text-primary" />
                     <h3 className="font-semibold mb-1">Account Settings</h3>
                     <p className="text-sm text-muted-foreground">
                       Manage your preferences

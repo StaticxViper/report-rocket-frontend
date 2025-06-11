@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Pricing from "./pages/Pricing";
 import Generate from "./pages/Generate";
 import Reports from "./pages/Reports";
+import Favorites from "./pages/Favorites";
 import Settings from "./pages/Settings";
 import Billing from "./pages/Billing";
 import NotFound from "./pages/NotFound";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/generate" element={<Generate />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/billing" element={<Billing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

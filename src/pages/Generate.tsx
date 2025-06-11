@@ -5,17 +5,29 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { MapPin, FileText, Loader2, CheckCircle2 } from 'lucide-react';
 
 export default function Generate() {
   const [address, setAddress] = useState('');
-  const [reportType, setReportType] = useState('');
-  const [notes, setNotes] = useState('');
+  const [reportPreferences, setReportPreferences] = useState({
+    propertyAnalysis: false,
+    marketComparison: false,
+    investmentAnalysis: false,
+    rentalAnalysis: false
+  });
   const [isGenerating, setIsGenerating] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+
+  const handlePreferenceChange = (preference: keyof typeof reportPreferences) => {
+    setReportPreferences(prev => ({
+      ...prev,
+      [preference]: !prev[preference]
+    }));
+  };
+
+  const hasSelectedPreferences = Object.values(reportPreferences).some(value => value);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,8 +41,12 @@ export default function Generate() {
         setIsComplete(false);
         // Reset form
         setAddress('');
-        setReportType('');
-        setNotes('');
+        setReportPreferences({
+          propertyAnalysis: false,
+          marketComparison: false,
+          investmentAnalysis: false,
+          rentalAnalysis: false
+        });
       }, 3000);
     }, 3000);
   };
@@ -100,31 +116,57 @@ export default function Generate() {
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="reportType">Report Type *</Label>
-                  <Select value={reportType} onValueChange={setReportType} required disabled={isGenerating}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select report type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="property-analysis">Property Analysis</SelectItem>
-                      <SelectItem value="market-comparison">Market Comparison</SelectItem>
-                      <SelectItem value="investment-analysis">Investment Analysis</SelectItem>
-                      <SelectItem value="rental-analysis">Rental Analysis</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="notes">Additional Notes (Optional)</Label>
-                  <Textarea
-                    id="notes"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Any specific requirements or focus areas for the report..."
-                    rows={3}
-                    disabled={isGenerating}
-                  />
+                <div className="space-y-4">
+                  <Label>Report Preferences *</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="propertyAnalysis"
+                        checked={reportPreferences.propertyAnalysis}
+                        onCheckedChange={() => handlePreferenceChange('propertyAnalysis')}
+                        disabled={isGenerating}
+                      />
+                      <Label htmlFor="propertyAnalysis" className="text-sm font-normal cursor-pointer">
+                        Property Analysis
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="marketComparison"
+                        checked={reportPreferences.marketComparison}
+                        onCheckedChange={() => handlePreferenceChange('marketComparison')}
+                        disabled={isGenerating}
+                      />
+                      <Label htmlFor="marketComparison" className="text-sm font-normal cursor-pointer">
+                        Market Comparison
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="investmentAnalysis"
+                        checked={reportPreferences.investmentAnalysis}
+                        onCheckedChange={() => handlePreferenceChange('investmentAnalysis')}
+                        disabled={isGenerating}
+                      />
+                      <Label htmlFor="investmentAnalysis" className="text-sm font-normal cursor-pointer">
+                        Investment Analysis
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="rentalAnalysis"
+                        checked={reportPreferences.rentalAnalysis}
+                        onCheckedChange={() => handlePreferenceChange('rentalAnalysis')}
+                        disabled={isGenerating}
+                      />
+                      <Label htmlFor="rentalAnalysis" className="text-sm font-normal cursor-pointer">
+                        Rental Analysis
+                      </Label>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Select one or more report types to include in your analysis
+                  </p>
                 </div>
 
                 <div className="bg-muted p-4 rounded-lg">
@@ -161,7 +203,7 @@ export default function Generate() {
                   type="submit" 
                   className="w-full" 
                   size="lg"
-                  disabled={isGenerating || !address || !reportType}
+                  disabled={isGenerating || !address || !hasSelectedPreferences}
                 >
                   {isGenerating ? (
                     <>
