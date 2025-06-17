@@ -44,23 +44,35 @@ export type Database = {
       }
       reports: {
         Row: {
+          address: string | null
           content: Json | null
           created_at: string | null
+          generated_date: string | null
           id: string
+          report_type: string | null
+          status: string | null
           title: string | null
           user_id: string | null
         }
         Insert: {
+          address?: string | null
           content?: Json | null
           created_at?: string | null
+          generated_date?: string | null
           id?: string
+          report_type?: string | null
+          status?: string | null
           title?: string | null
           user_id?: string | null
         }
         Update: {
+          address?: string | null
           content?: Json | null
           created_at?: string | null
+          generated_date?: string | null
           id?: string
+          report_type?: string | null
+          status?: string | null
           title?: string | null
           user_id?: string | null
         }

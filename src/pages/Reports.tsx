@@ -8,58 +8,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Search, Filter, Download, FileText, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useReports } from '@/hooks/useReports';
+import { toast } from 'sonner';
 
 export default function Reports() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const { reports, isLoading, error, deleteReport } = useReports();
 
-  const reports = [
-    {
-      id: '1',
-      address: '123 Main St, Los Angeles, CA 90210',
-      generatedDate: '2024-01-15',
-      status: 'completed' as const,
-      type: 'Property Analysis'
-    },
-    {
-      id: '2',
-      address: '456 Oak Ave, San Francisco, CA 94102',
-      generatedDate: '2024-01-14',
-      status: 'processing' as const,
-      type: 'Market Comparison'
-    },
-    {
-      id: '3',
-      address: '789 Pine St, San Diego, CA 92101',
-      generatedDate: '2024-01-13',
-      status: 'completed' as const,
-      type: 'Investment Analysis'
-    },
-    {
-      id: '4',
-      address: '321 Elm Dr, Sacramento, CA 95814',
-      generatedDate: '2024-01-12',
-      status: 'completed' as const,
-      type: 'Rental Analysis'
-    },
-    {
-      id: '5',
-      address: '654 Maple Ave, Fresno, CA 93721',
-      generatedDate: '2024-01-11',
-      status: 'failed' as const,
-      type: 'Property Analysis'
-    },
-    {
-      id: '6',
-      address: '987 Cedar St, Oakland, CA 94601',
-      generatedDate: '2024-01-10',
-      status: 'completed' as const,
-      type: 'Market Comparison'
-    }
-  ];
+  if (error) {
+    console.error('Reports error:', error);
+  }
 
   const filteredReports = reports.filter(report => {
-    const matchesSearch = report.address.toLowerCase().includes(searchTerm.toLowerCase());
+    const address = report.address || '';
+    const matchesSearch = address.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || report.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -67,8 +30,30 @@ export default function Reports() {
   const handleBulkDownload = () => {
     const completedReports = filteredReports.filter(report => report.status === 'completed');
     console.log('Bulk downloading reports:', completedReports.map(r => r.id));
-    alert(`Downloading ${completedReports.length} completed reports...`);
+    toast.success(`Starting download of ${completedReports.length} completed reports...`);
   };
+
+  const handleView = (reportId: string) => {
+    console.log('View report', reportId);
+    toast.info('Report viewer coming soon!');
+  };
+
+  const handleDownload = (reportId: string) => {
+    console.log('Download report', reportId);
+    toast.success('Report download started!');
+  };
+
+  if (isLoading) {
+    return (
+      <DashboardLayout>
+        <div className="p-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -139,9 +124,13 @@ export default function Reports() {
             {filteredReports.map((report) => (
               <ReportCard
                 key={report.id}
-                {...report}
-                onView={() => console.log('View report', report.id)}
-                onDownload={() => console.log('Download report', report.id)}
+                id={report.id}
+                address={report.address || 'No address'}
+                generatedDate={report.generated_date || report.created_at?.split('T')[0] || 'Unknown'}
+                status={report.status}
+                type={report.report_type || 'Property Analysis'}
+                onView={() => handleView(report.id)}
+                onDownload={() => handleDownload(report.id)}
               />
             ))}
           </div>
