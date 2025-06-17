@@ -2,9 +2,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import Dashboard from './Dashboard';
 
-export default function Index() {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
@@ -26,5 +29,5 @@ export default function Index() {
     return null;
   }
 
-  return <Dashboard />;
+  return <>{children}</>;
 }

@@ -12,6 +12,7 @@ import {
   User,
   Heart
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: Home },
@@ -25,6 +26,25 @@ const navigation = [
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
+
+  const getInitials = () => {
+    if (!user?.user_metadata?.first_name && !user?.user_metadata?.last_name) {
+      return user?.email?.charAt(0).toUpperCase() || 'U';
+    }
+    const first = user?.user_metadata?.first_name?.charAt(0) || '';
+    const last = user?.user_metadata?.last_name?.charAt(0) || '';
+    return (first + last).toUpperCase();
+  };
+
+  const getDisplayName = () => {
+    const firstName = user?.user_metadata?.first_name;
+    const lastName = user?.user_metadata?.last_name;
+    if (firstName && lastName) {
+      return `${firstName} ${lastName}`;
+    }
+    return user?.email || 'User';
+  };
 
   return (
     <div className={cn(
@@ -83,11 +103,13 @@ export function Sidebar() {
           )}
         >
           <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-            <User className="h-4 w-4 text-primary-foreground" />
+            <span className="text-sm font-medium text-primary-foreground">
+              {getInitials()}
+            </span>
           </div>
           {!collapsed && (
             <div className="flex-1">
-              <p className="text-sm font-medium">John Doe</p>
+              <p className="text-sm font-medium">{getDisplayName()}</p>
               <p className="text-xs text-muted-foreground">Pro Plan</p>
             </div>
           )}
