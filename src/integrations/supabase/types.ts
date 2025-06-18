@@ -47,6 +47,7 @@ export type Database = {
           address: string | null
           content: Json | null
           created_at: string | null
+          favorite_flag: boolean
           generated_date: string | null
           id: string
           report_type: string | null
@@ -58,6 +59,7 @@ export type Database = {
           address?: string | null
           content?: Json | null
           created_at?: string | null
+          favorite_flag?: boolean
           generated_date?: string | null
           id?: string
           report_type?: string | null
@@ -69,6 +71,7 @@ export type Database = {
           address?: string | null
           content?: Json | null
           created_at?: string | null
+          favorite_flag?: boolean
           generated_date?: string | null
           id?: string
           report_type?: string | null

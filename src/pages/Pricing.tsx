@@ -57,7 +57,7 @@ export default function Pricing() {
     console.log(`Selected plan: ${planTitle}`);
     // Here you would integrate with Stripe
     if (planTitle === "Free") {
-      window.location.href = '/';
+      window.location.href = '/auth';
     } else {
       // Redirect to Stripe checkout
       alert(`Redirecting to ${planTitle} plan checkout...`);
@@ -69,16 +69,24 @@ export default function Pricing() {
       {/* Header */}
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2">
             <Building2 className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold">PropertyPro</span>
-          </div>
-          <Link to="/login">
-            <Button variant="ghost">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Login
-            </Button>
           </Link>
+          <div className="hidden md:flex items-center space-x-8">
+            <Link to="/" className="text-gray-700 hover:text-primary">Home</Link>
+            <Link to="/about" className="text-gray-700 hover:text-primary">About</Link>
+            <Link to="/pricing" className="text-primary font-medium">Pricing</Link>
+            <Link to="/contact" className="text-gray-700 hover:text-primary">Contact</Link>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Link to="/auth">
+              <Button variant="ghost">Log In</Button>
+            </Link>
+            <Link to="/auth">
+              <Button>Sign Up</Button>
+            </Link>
+          </div>
         </div>
 
         {/* Hero Section */}
