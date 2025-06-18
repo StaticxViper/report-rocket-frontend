@@ -7,61 +7,65 @@ import { Link } from 'react-router-dom';
 export default function Pricing() {
   const plans = [
     {
-      title: "Free",
-      description: "Perfect for getting started",
-      price: "$0",
-      period: "month",
+      title: "Pay-per-Report",
+      description: "Perfect for occasional property analysis",
+      price: "$49",
+      period: "per report",
       features: [
-        "3 reports per month",
-        "Basic property analysis",
+        "Professional property analysis",
+        "Market comparison data",
+        "Investment metrics",
+        "PDF export",
         "Email support",
-        "PDF downloads"
+        "No monthly commitment"
       ],
-      buttonText: "Get Started Free"
+      buttonText: "Start 14-Day Free Trial",
+      popular: false
     },
     {
       title: "Pro",
-      description: "For growing real estate professionals",
-      price: "$29",
+      description: "For active real estate professionals",
+      price: "$199",
       period: "month",
       features: [
         "50 reports per month",
         "Advanced market analysis",
-        "Priority support",
         "Custom branding",
+        "Priority support",
         "API access",
-        "Export to multiple formats"
+        "Team collaboration (up to 3 users)",
+        "Advanced export options",
+        "Historical data trends"
       ],
-      buttonText: "Start Pro Trial",
+      buttonText: "Start 14-Day Free Trial",
       popular: true
     },
     {
-      title: "Agency",
+      title: "Expert",
       description: "For teams and large organizations",
-      price: "$99",
+      price: "$499",
       period: "month",
       features: [
         "Unlimited reports",
-        "Team collaboration",
         "White-label solution",
-        "Dedicated support",
+        "Dedicated account manager",
         "Custom integrations",
-        "Advanced analytics",
-        "Bulk operations"
+        "Advanced analytics dashboard",
+        "Unlimited team members",
+        "24/7 phone support",
+        "Custom training sessions",
+        "Data export automation"
       ],
-      buttonText: "Contact Sales"
+      buttonText: "Start 14-Day Free Trial",
+      popular: false
     }
   ];
 
   const handlePlanSelect = (planTitle: string) => {
     console.log(`Selected plan: ${planTitle}`);
-    // Here you would integrate with Stripe
-    if (planTitle === "Free") {
-      window.location.href = '/auth';
-    } else {
-      // Redirect to Stripe checkout
-      alert(`Redirecting to ${planTitle} plan checkout...`);
-    }
+    // Redirect to auth page with plan selection
+    const planParam = planTitle.toLowerCase().replace('-', '_');
+    window.location.href = `/auth?plan=${planParam}&trial=true`;
   };
 
   return (
@@ -94,10 +98,15 @@ export default function Pricing() {
           <h1 className="text-4xl font-bold mb-4">
             Choose Your Plan
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Start with our free plan and upgrade as your business grows. 
-            All plans include a 7-day free trial.
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
+            Start with our 14-day free trial on any plan. No commitment required. 
+            Payment information needed to activate your trial.
           </p>
+          <div className="bg-blue-100 border border-blue-200 rounded-lg p-4 max-w-2xl mx-auto">
+            <p className="text-blue-800 font-medium">
+              🎉 All plans include a 14-day free trial with full access to features
+            </p>
+          </div>
         </div>
 
         {/* Pricing Cards */}
@@ -111,29 +120,57 @@ export default function Pricing() {
           ))}
         </div>
 
+        {/* Trial Information */}
+        <div className="mt-16 text-center max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold mb-6">How the Free Trial Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="text-3xl mb-4">📝</div>
+              <h3 className="font-semibold mb-2">1. Sign Up</h3>
+              <p className="text-muted-foreground text-sm">
+                Create your account and provide payment information to start your trial
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="text-3xl mb-4">🚀</div>
+              <h3 className="font-semibold mb-2">2. Explore Features</h3>
+              <p className="text-muted-foreground text-sm">
+                Access all premium features for 14 days with no restrictions
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="text-3xl mb-4">✅</div>
+              <h3 className="font-semibold mb-2">3. Decide</h3>
+              <p className="text-muted-foreground text-sm">
+                Continue with your plan or cancel before the trial ends
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* FAQ Section */}
         <div className="mt-16 text-center">
           <h2 className="text-2xl font-bold mb-8">Frequently Asked Questions</h2>
           <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
             <div>
-              <h3 className="font-semibold mb-2">Can I change plans later?</h3>
+              <h3 className="font-semibold mb-2">Why do you need payment information for the trial?</h3>
               <p className="text-muted-foreground">
-                Yes, you can upgrade or downgrade your plan at any time. 
-                Changes take effect immediately.
+                Payment information ensures a seamless transition after your trial. 
+                You won't be charged until the 14-day trial period ends.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">What's included in reports?</h3>
+              <h3 className="font-semibold mb-2">Can I cancel during the trial?</h3>
               <p className="text-muted-foreground">
-                All reports include property valuation, market analysis, 
-                comparable sales, and investment metrics.
+                Yes! You can cancel anytime during your 14-day trial 
+                with no charges or commitment.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">Is there a free trial?</h3>
+              <h3 className="font-semibold mb-2">What happens after the trial?</h3>
               <p className="text-muted-foreground">
-                Yes! All paid plans include a 7-day free trial. 
-                No credit card required.
+                After 14 days, you'll be charged for your selected plan. 
+                You can change or cancel your subscription at any time.
               </p>
             </div>
             <div>

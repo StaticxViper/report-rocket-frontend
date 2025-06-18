@@ -14,30 +14,42 @@ export type Database = {
           created_at: string | null
           first_name: string | null
           id: string
+          is_trial_active: boolean | null
           last_name: string | null
           max_reports_per_month: number | null
           reports_generated: number | null
+          subscription_status: string | null
           subscription_tier: string | null
+          trial_end_date: string | null
+          trial_start_date: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           first_name?: string | null
           id: string
+          is_trial_active?: boolean | null
           last_name?: string | null
           max_reports_per_month?: number | null
           reports_generated?: number | null
+          subscription_status?: string | null
           subscription_tier?: string | null
+          trial_end_date?: string | null
+          trial_start_date?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           first_name?: string | null
           id?: string
+          is_trial_active?: boolean | null
           last_name?: string | null
           max_reports_per_month?: number | null
           reports_generated?: number | null
+          subscription_status?: string | null
           subscription_tier?: string | null
+          trial_end_date?: string | null
+          trial_start_date?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -86,7 +98,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_trial_expired: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      start_trial_period: {
+        Args: { user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
