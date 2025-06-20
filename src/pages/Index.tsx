@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -34,14 +33,7 @@ export default function Index() {
   }, [user, userProfile, isTrialExpired]);
 
   const handleStartTrial = async () => {
-    const { error } = await startTrial();
-    if (error) {
-      console.error('Error starting trial:', error);
-    } else {
-      setTrialExpired(false);
-      // Refresh the page to show dashboard
-      window.location.reload();
-    }
+    navigate('/payment-info');
   };
 
   if (loading || checkingTrial) {
@@ -67,7 +59,7 @@ export default function Index() {
               Start Your Free Trial
             </CardTitle>
             <CardDescription>
-              Welcome! Click below to activate your 14-day free trial and get full access to all features.
+              Welcome! Add your payment information to activate your 14-day free trial and get full access to all features.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -77,12 +69,11 @@ export default function Index() {
               </p>
               <Button onClick={handleStartTrial} className="w-full" size="lg">
                 <CreditCard className="h-4 w-4 mr-2" />
-                Activate Free Trial
+                Add Payment & Start Trial
               </Button>
             </div>
             <div className="text-xs text-center text-muted-foreground">
-              Note: Payment information will be required to start your trial, 
-              but you won't be charged until the trial period ends.
+              You won't be charged until your trial period ends. Cancel anytime.
             </div>
           </CardContent>
         </Card>

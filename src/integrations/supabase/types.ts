@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      payment_info: {
+        Row: {
+          billing_address_line1: string
+          billing_address_line2: string | null
+          billing_city: string
+          billing_country: string
+          billing_state: string
+          billing_zip: string
+          card_last_four: string
+          card_type: string
+          cardholder_name: string
+          created_at: string | null
+          id: string
+          is_default: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          billing_address_line1: string
+          billing_address_line2?: string | null
+          billing_city: string
+          billing_country?: string
+          billing_state: string
+          billing_zip: string
+          card_last_four: string
+          card_type: string
+          cardholder_name: string
+          created_at?: string | null
+          id?: string
+          is_default?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          billing_address_line1?: string
+          billing_address_line2?: string | null
+          billing_city?: string
+          billing_country?: string
+          billing_state?: string
+          billing_zip?: string
+          card_last_four?: string
+          card_type?: string
+          cardholder_name?: string
+          created_at?: string | null
+          id?: string
+          is_default?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -57,39 +108,93 @@ export type Database = {
       reports: {
         Row: {
           address: string | null
+          annual_insurance: number | null
+          annual_property_taxes: number | null
+          calculated_cap_rate: number | null
+          calculated_cash_flow: number | null
+          calculated_roi: number | null
+          cap_rate: number | null
           content: Json | null
           created_at: string | null
+          down_payment: number | null
           favorite_flag: boolean
           generated_date: string | null
+          hoa_fees: number | null
           id: string
+          interest_rate: number | null
+          loan_amount: number | null
+          loan_term_years: number | null
+          maintenance_costs: number | null
+          monthly_rent: number | null
+          other_expenses: number | null
+          property_address: string | null
+          property_mgmt_fee: number | null
+          purchase_price: number | null
           report_type: string | null
           status: string | null
           title: string | null
           user_id: string | null
+          vacancy_rate: number | null
         }
         Insert: {
           address?: string | null
+          annual_insurance?: number | null
+          annual_property_taxes?: number | null
+          calculated_cap_rate?: number | null
+          calculated_cash_flow?: number | null
+          calculated_roi?: number | null
+          cap_rate?: number | null
           content?: Json | null
           created_at?: string | null
+          down_payment?: number | null
           favorite_flag?: boolean
           generated_date?: string | null
+          hoa_fees?: number | null
           id?: string
+          interest_rate?: number | null
+          loan_amount?: number | null
+          loan_term_years?: number | null
+          maintenance_costs?: number | null
+          monthly_rent?: number | null
+          other_expenses?: number | null
+          property_address?: string | null
+          property_mgmt_fee?: number | null
+          purchase_price?: number | null
           report_type?: string | null
           status?: string | null
           title?: string | null
           user_id?: string | null
+          vacancy_rate?: number | null
         }
         Update: {
           address?: string | null
+          annual_insurance?: number | null
+          annual_property_taxes?: number | null
+          calculated_cap_rate?: number | null
+          calculated_cash_flow?: number | null
+          calculated_roi?: number | null
+          cap_rate?: number | null
           content?: Json | null
           created_at?: string | null
+          down_payment?: number | null
           favorite_flag?: boolean
           generated_date?: string | null
+          hoa_fees?: number | null
           id?: string
+          interest_rate?: number | null
+          loan_amount?: number | null
+          loan_term_years?: number | null
+          maintenance_costs?: number | null
+          monthly_rent?: number | null
+          other_expenses?: number | null
+          property_address?: string | null
+          property_mgmt_fee?: number | null
+          purchase_price?: number | null
           report_type?: string | null
           status?: string | null
           title?: string | null
           user_id?: string | null
+          vacancy_rate?: number | null
         }
         Relationships: []
       }

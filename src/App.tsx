@@ -1,79 +1,50 @@
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './hooks/useAuth';
+import Index from './pages/Index';
+import Generate from './pages/Generate';
+import Reports from './pages/Reports';
+import Pricing from './pages/Pricing';
+import Billing from './pages/Billing';
+import NotFound from './pages/NotFound';
+import { Toaster } from 'sonner';
+import PaymentInfo from './pages/PaymentInfo';
+import { QueryClient } from '@tanstack/react-query';
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/hooks/useAuth";
-import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
-import Index from "./pages/Index";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Auth from "./pages/Auth";
-import Pricing from "./pages/Pricing";
-import Generate from "./pages/Generate";
-import Reports from "./pages/Reports";
-import Favorites from "./pages/Favorites";
-import Settings from "./pages/Settings";
-import Billing from "./pages/Billing";
-import NotFound from "./pages/NotFound";
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
 
-const queryClient = new QueryClient();
+  if (loading) {
+    return <div>Loading...</div>; // Or a spinner
+  }
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <AuthProvider>
-        <BrowserRouter>
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+function App() {
+  return (
+    <QueryClient>
+      <BrowserRouter>
+        <AuthProvider>
+          <Toaster />
           <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/generate" element={<ProtectedRoute><Generate /></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
             <Route path="/pricing" element={<Pricing />} />
-            
-            {/* Protected routes */}
-            <Route path="/dashboard" element={
-              <ProtectedRoute>
-                <Index />
-              </ProtectedRoute>
-            } />
-            <Route path="/generate" element={
-              <ProtectedRoute>
-                <Generate />
-              </ProtectedRoute>
-            } />
-            <Route path="/reports" element={
-              <ProtectedRoute>
-                <Reports />
-              </ProtectedRoute>
-            } />
-            <Route path="/favorites" element={
-              <ProtectedRoute>
-                <Favorites />
-              </ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            } />
-            <Route path="/billing" element={
-              <ProtectedRoute>
-                <Billing />
-              </ProtectedRoute>
-            } />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/payment-info" element={<ProtectedRoute><PaymentInfo /></ProtectedRoute>} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+        </AuthProvider>
+      </BrowserRouter>
+    </QueryClient>
+  );
+}
 
 export default App;
