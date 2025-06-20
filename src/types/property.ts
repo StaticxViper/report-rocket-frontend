@@ -1,3 +1,4 @@
+
 import * as z from 'zod';
 
 export const propertySchema = z.object({
@@ -34,4 +35,5 @@ export interface CalculatedMetrics {
   roi: number;
   calculatedCapRate: number;
   totalAnnualExpenses: number;
+  [key: string]: number; // Add index signature for Supabase Json compatibility
 }
