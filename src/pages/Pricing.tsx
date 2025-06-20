@@ -3,8 +3,11 @@ import { PricingCard } from '@/components/pricing/PricingCard';
 import { Button } from '@/components/ui/button';
 import { Building2, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Pricing() {
+  const { user } = useAuth();
+
   const plans = [
     {
       title: "Pay-per-Report",
@@ -64,8 +67,15 @@ export default function Pricing() {
   const handlePlanSelect = (planTitle: string) => {
     console.log(`Selected plan: ${planTitle}`);
     // Redirect to auth page with plan selection
-    const planParam = planTitle.toLowerCase().replace('-', '_');
-    window.location.href = `/auth?plan=${planParam}&trial=true`;
+    const planParam = planTitle.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    
+    if (user) {
+      // If already logged in, go to payment info to complete trial setup
+      window.location.href = `/payment-info?plan=${planParam}&trial=true`;
+    } else {
+      // If not logged in, go to auth page first
+      window.location.href = `/auth?plan=${planParam}&trial=true`;
+    }
   };
 
   return (
@@ -84,12 +94,20 @@ export default function Pricing() {
             <Link to="/contact" className="text-gray-700 hover:text-primary">Contact</Link>
           </div>
           <div className="flex items-center space-x-4">
-            <Link to="/auth">
-              <Button variant="ghost">Log In</Button>
-            </Link>
-            <Link to="/auth">
-              <Button>Sign Up</Button>
-            </Link>
+            {user ? (
+              <Link to="/dashboard">
+                <Button>Dashboard</Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="ghost">Log In</Button>
+                </Link>
+                <Link to="/auth">
+                  <Button>Sign Up</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 

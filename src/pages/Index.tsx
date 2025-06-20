@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -7,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Clock, CreditCard } from 'lucide-react';
 
 export default function Index() {
-  const { user, userProfile, loading, startTrial, isTrialExpired } = useAuth();
+  const { user, userProfile, loading, isTrialExpired } = useAuth();
   const navigate = useNavigate();
   const [trialExpired, setTrialExpired] = useState(false);
   const [checkingTrial, setCheckingTrial] = useState(true);
@@ -56,10 +57,10 @@ export default function Index() {
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
               <Clock className="h-6 w-6 text-primary" />
-              Start Your Free Trial
+              Complete Your Trial Setup
             </CardTitle>
             <CardDescription>
-              Welcome! Add your payment information to activate your 14-day free trial and get full access to all features.
+              You're almost ready! Add your payment information to activate your 14-day free trial and get full access to all features.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -74,6 +75,15 @@ export default function Index() {
             </div>
             <div className="text-xs text-center text-muted-foreground">
               You won't be charged until your trial period ends. Cancel anytime.
+            </div>
+            <div className="text-center">
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/pricing')} 
+                className="w-full"
+              >
+                View All Plans
+              </Button>
             </div>
           </CardContent>
         </Card>
