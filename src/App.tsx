@@ -1,5 +1,7 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Index from './pages/Index';
 import Generate from './pages/Generate';
@@ -9,7 +11,8 @@ import Billing from './pages/Billing';
 import NotFound from './pages/NotFound';
 import { Toaster } from 'sonner';
 import PaymentInfo from './pages/PaymentInfo';
-import { QueryClient } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -27,7 +30,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   return (
-    <QueryClient>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
           <Toaster />
@@ -43,7 +46,7 @@ function App() {
           </Routes>
         </AuthProvider>
       </BrowserRouter>
-    </QueryClient>
+    </QueryClientProvider>
   );
 }
 

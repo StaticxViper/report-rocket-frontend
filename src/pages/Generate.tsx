@@ -219,7 +219,7 @@ export default function Generate() {
                         summary.recommendation === 'Strong Investment' ? 'text-green-600' :
                         summary.recommendation === 'Good Investment' ? 'text-yellow-600' : 'text-red-600'
                       }`}>
-                        {summary.recommendation}
+                        {summary.recommendation || 'No recommendation'}
                       </span>
                     </div>
                   </div>
@@ -235,7 +235,7 @@ export default function Generate() {
                     {Object.entries(summary.keyMetrics || {}).map(([key, value]) => (
                       <div key={key} className="flex justify-between">
                         <span className="text-muted-foreground">{key}:</span>
-                        <span className="font-medium">{value}</span>
+                        <span className="font-medium">{String(value)}</span>
                       </div>
                     ))}
                   </div>
