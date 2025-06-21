@@ -11,6 +11,9 @@ import Pricing from './pages/Pricing';
 import Billing from './pages/Billing';
 import NotFound from './pages/NotFound';
 import Auth from './pages/Auth';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Favorites from './pages/Favorites';
 import { Toaster } from 'sonner';
 import PaymentInfo from './pages/PaymentInfo';
 
@@ -38,11 +41,14 @@ function App() {
           <Toaster />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/generate" element={<ProtectedRoute><Generate /></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
             <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
             <Route path="/payment-info" element={<ProtectedRoute><PaymentInfo /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />

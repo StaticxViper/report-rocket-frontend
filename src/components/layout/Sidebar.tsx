@@ -15,7 +15,7 @@ import {
 import { useAuth } from '@/hooks/useAuth';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home },
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Generate Report', href: '/generate', icon: FileText },
   { name: 'Property Reports', href: '/reports', icon: Building2 },
   { name: 'Favorites', href: '/favorites', icon: Heart },
