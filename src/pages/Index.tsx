@@ -15,7 +15,7 @@ export default function Index() {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate('/');
+      navigate('/auth');
     }
   }, [user, loading, navigate]);
 
@@ -25,10 +25,13 @@ export default function Index() {
         const expired = await isTrialExpired();
         setTrialExpired(expired);
         setCheckingTrial(false);
+      } else if (user && !userProfile) {
+        // User exists but no profile yet, allow access to dashboard
+        setCheckingTrial(false);
       }
     };
 
-    if (userProfile) {
+    if (user) {
       checkTrialStatus();
     }
   }, [user, userProfile, isTrialExpired]);
@@ -49,7 +52,7 @@ export default function Index() {
     return null;
   }
 
-  // Show trial setup if user hasn't started trial yet
+  // Show trial setup only if user specifically has trial_pending status
   if (userProfile?.subscription_status === 'trial_pending') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -85,13 +88,22 @@ export default function Index() {
                 View All Plans
               </Button>
             </div>
+            <div className="text-center">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/dashboard')} 
+                className="w-full text-sm"
+              >
+                Continue to Dashboard
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
     );
   }
 
-  // Show expired trial message
+  // Show expired trial message only if trial is actually expired
   if (trialExpired && userProfile?.subscription_status === 'trial_active') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -123,6 +135,6 @@ export default function Index() {
     );
   }
 
-  // Show dashboard if trial is active or user has active subscription
+  // Default: show dashboard for all authenticated users
   return <Dashboard />;
 }

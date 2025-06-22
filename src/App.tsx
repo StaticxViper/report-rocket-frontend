@@ -14,8 +14,8 @@ import Auth from './pages/Auth';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Favorites from './pages/Favorites';
-import { Toaster } from 'sonner';
 import PaymentInfo from './pages/PaymentInfo';
+import { Toaster } from 'sonner';
 
 const queryClient = new QueryClient();
 
@@ -23,7 +23,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // Or a spinner
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   if (!user) {
@@ -45,6 +49,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Navigate to="/auth" replace />} />
+            <Route path="/signup" element={<Navigate to="/auth" replace />} />
             <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/generate" element={<ProtectedRoute><Generate /></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />

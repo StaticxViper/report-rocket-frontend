@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 .from('profiles')
                 .select('*')
                 .eq('id', session.user.id)
-                .single();
+                .maybeSingle();
               setUserProfile(profile);
             } catch (error) {
               console.error('Error fetching user profile:', error);
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const redirectUrl = `${window.location.origin}/dashboard`;
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -89,6 +89,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       });
+
+      // If signup is successful and user is immediately confirmed, redirect
+      if (!error && data.user && !data.user.email_confirmed_at) {
+        // User needs to confirm email
+        return { error: null };
+      } else if (!error && data.user && data.user.email_confirmed_at) {
+        // User is immediately confirmed, redirect
+        setTimeout(() => {
+          window.location.href = '/dashboard';
+        }, 100);
+      }
+
       return { error };
     } catch (error) {
       return { error };
@@ -166,7 +178,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .from('profiles')
           .select('*')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
         setUserProfile(profile);
       }
 

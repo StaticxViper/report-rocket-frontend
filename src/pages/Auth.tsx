@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const initialMode = searchParams.get('mode') === 'signup' ? false : true;
+  const [isLogin, setIsLogin] = useState(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -50,7 +52,6 @@ export default function Auth() {
             title: "Welcome back!",
             description: "You have been signed in successfully.",
           });
-          navigate('/dashboard');
         }
       } else {
         const { error } = await signUp(formData.email, formData.password, formData.firstName, formData.lastName);
@@ -63,7 +64,7 @@ export default function Auth() {
         } else {
           toast({
             title: "Account created!",
-            description: "Please check your email to verify your account.",
+            description: "Please check your email to verify your account if required.",
           });
         }
       }
@@ -80,6 +81,17 @@ export default function Auth() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    // Clear form when switching modes
+    setFormData({
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: ''
+    });
   };
 
   return (
@@ -181,6 +193,17 @@ export default function Auth() {
                   </div>
                 </div>
               )}
+              {isLogin && (
+                <div className="flex items-center justify-between">
+                  <button
+                    type="button"
+                    className="text-sm text-primary hover:underline"
+                    onClick={() => {/* TODO: Add forgot password functionality */}}
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              )}
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
               <Button type="submit" className="w-full" disabled={isLoading}>
@@ -193,7 +216,7 @@ export default function Auth() {
                 {isLogin ? "Don't have an account? " : "Already have an account? "}
                 <button
                   type="button"
-                  onClick={() => setIsLogin(!isLogin)}
+                  onClick={toggleMode}
                   className="text-primary hover:underline"
                 >
                   {isLogin ? "Sign up" : "Sign in"}
