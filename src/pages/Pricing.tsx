@@ -23,7 +23,8 @@ export default function Pricing() {
         "No monthly commitment"
       ],
       buttonText: "Start 14-Day Free Trial",
-      popular: false
+      popular: false,
+      link: "https://buy.stripe.com/9B6cMY9LycXfeWV8a5asg02"
     },
     {
       title: "Pro",
@@ -41,7 +42,8 @@ export default function Pricing() {
         "Historical data trends"
       ],
       buttonText: "Start 14-Day Free Trial",
-      popular: true
+      popular: true,
+      link: "https://buy.stripe.com/4gM00ccXK6yR3eddupasg01"
     },
     {
       title: "Expert",
