@@ -8,19 +8,37 @@ import { PropertyFormData } from '@/types/property';
 import { calculateMetrics } from '@/utils/propertyCalculations';
 import { PropertyForm } from '@/components/generate/PropertyForm';
 import { ReportResults } from '@/components/generate/ReportResults';
+import { PaymentModal } from '@/components/PaymentModal';
 
 export default function Generate() {
-  const { user } = useAuth();
+  const { user, isTrialActive, hasActiveSubscription } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [generatedReport, setGeneratedReport] = useState<any>(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [pendingFormData, setPendingFormData] = useState<PropertyFormData | null>(null);
 
-  const onSubmit = async (data: PropertyFormData) => {
+  const checkAccessAndGenerate = async (data: PropertyFormData) => {
     if (!user) {
       toast.error('Please log in to generate reports');
       return;
     }
 
+    // Check if user has access (active trial or subscription)
+    const trialActive = await isTrialActive();
+    const hasSubscription = await hasActiveSubscription();
+
+    if (trialActive || hasSubscription) {
+      // User has access, generate report
+      generateReport(data);
+    } else {
+      // User needs to pay, show payment modal
+      setPendingFormData(data);
+      setShowPaymentModal(true);
+    }
+  };
+
+  const generateReport = async (data: PropertyFormData) => {
     setIsGenerating(true);
 
     try {
@@ -30,7 +48,7 @@ export default function Generate() {
       const { data: report, error } = await supabase
         .from('reports')
         .insert({
-          user_id: user.id,
+          user_id: user!.id,
           property_address: data.propertyAddress,
           address: data.propertyAddress,
           purchase_price: data.purchasePrice,
@@ -85,6 +103,13 @@ export default function Generate() {
     }
   };
 
+  const handlePaymentComplete = () => {
+    if (pendingFormData) {
+      generateReport(pendingFormData);
+      setPendingFormData(null);
+    }
+  };
+
   const handleViewAllReports = () => {
     window.location.href = '/reports';
   };
@@ -119,8 +144,14 @@ export default function Generate() {
             </p>
           </div>
 
-          <PropertyForm onSubmit={onSubmit} isGenerating={isGenerating} />
+          <PropertyForm onSubmit={checkAccessAndGenerate} isGenerating={isGenerating} />
         </div>
+
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          onPaymentComplete={handlePaymentComplete}
+        />
       </div>
     </DashboardLayout>
   );

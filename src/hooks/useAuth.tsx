@@ -12,8 +12,9 @@ interface AuthContextType {
   signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
-  startTrial: () => Promise<{ error: any }>;
+  isTrialActive: () => Promise<boolean>;
   isTrialExpired: () => Promise<boolean>;
+  hasActiveSubscription: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,6 +43,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 .eq('id', session.user.id)
                 .maybeSingle();
               setUserProfile(profile);
+
+              // If this is a new user (no profile or trial not started), start trial
+              if (profile && !profile.trial_start_date) {
+                console.log('Starting free trial for new user');
+                await startFreeTrial();
+              }
             } catch (error) {
               console.error('Error fetching user profile:', error);
             }
@@ -64,12 +71,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  const startFreeTrial = async () => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase.rpc('start_trial_period', {
+        user_id: user.id
+      });
+
+      if (!error) {
+        // Refresh user profile
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle();
+        setUserProfile(profile);
+      }
+    } catch (error) {
+      console.error('Error starting trial:', error);
+    }
+  };
+
   const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
     try {
-      // Clean up existing state
       cleanupAuthState();
       
-      // Attempt global sign out
       try {
         await supabase.auth.signOut({ scope: 'global' });
       } catch (err) {
@@ -90,12 +117,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       });
 
-      // If signup is successful and user is immediately confirmed, redirect
       if (!error && data.user && !data.user.email_confirmed_at) {
-        // User needs to confirm email
         return { error: null };
       } else if (!error && data.user && data.user.email_confirmed_at) {
-        // User is immediately confirmed, redirect
         setTimeout(() => {
           window.location.href = '/dashboard';
         }, 100);
@@ -109,10 +133,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     try {
-      // Clean up existing state
       cleanupAuthState();
       
-      // Attempt global sign out
       try {
         await supabase.auth.signOut({ scope: 'global' });
       } catch (err) {
@@ -125,7 +147,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (!error && data.user) {
-        // Force page reload for clean state
         setTimeout(() => {
           window.location.href = '/dashboard';
         }, 100);
@@ -139,10 +160,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     try {
-      // Clean up auth state
       cleanupAuthState();
       
-      // Attempt global sign out
       try {
         await supabase.auth.signOut({ scope: 'global' });
       } catch (err) {
@@ -153,38 +172,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setSession(null);
       
-      // Force page reload for clean state
       window.location.href = '/';
     } catch (error) {
       console.error('Sign out error:', error);
-      // Force navigation even on error
       window.location.href = '/';
     }
   };
 
-  const startTrial = async () => {
-    if (!user) {
-      return { error: new Error('User must be authenticated to start trial') };
-    }
+  const isTrialActive = async () => {
+    if (!user || !userProfile) return false;
 
     try {
-      const { error } = await supabase.rpc('start_trial_period', {
+      const { data, error } = await supabase.rpc('is_trial_expired', {
         user_id: user.id
       });
 
-      if (!error) {
-        // Refresh user profile to get updated trial status
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .maybeSingle();
-        setUserProfile(profile);
-      }
-
-      return { error };
+      if (error) return false;
+      return userProfile.is_trial_active && !data;
     } catch (error) {
-      return { error };
+      return false;
     }
   };
 
@@ -203,6 +209,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const hasActiveSubscription = async () => {
+    if (!userProfile) return false;
+    
+    // Check if user has a paid subscription (not trial)
+    return userProfile.subscription_status === 'active' && 
+           userProfile.subscription_tier !== 'free';
+  };
+
   const value = {
     user,
     session,
@@ -211,8 +225,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signIn,
     signOut,
-    startTrial,
+    isTrialActive,
     isTrialExpired,
+    hasActiveSubscription,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

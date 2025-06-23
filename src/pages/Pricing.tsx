@@ -1,7 +1,7 @@
 
 import { PricingCard } from '@/components/pricing/PricingCard';
 import { Button } from '@/components/ui/button';
-import { Building2, ArrowLeft } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -16,13 +16,13 @@ export default function Pricing() {
       period: "per report",
       features: [
         "Professional property analysis",
-        "Market comparison data",
+        "Market comparison data", 
         "Investment metrics",
         "PDF export",
         "Email support",
         "No monthly commitment"
       ],
-      buttonText: "Start 14-Day Free Trial",
+      buttonText: "Buy Single Report",
       popular: false,
       link: "https://buy.stripe.com/9B6cMY9LycXfeWV8a5asg02"
     },
@@ -36,24 +36,24 @@ export default function Pricing() {
         "Advanced market analysis",
         "Custom branding",
         "Priority support",
-        "API access",
+        "API access", 
         "Team collaboration (up to 3 users)",
         "Advanced export options",
         "Historical data trends"
       ],
-      buttonText: "Start 14-Day Free Trial",
+      buttonText: "Start Subscription",
       popular: true,
       link: "https://buy.stripe.com/4gM00ccXK6yR3eddupasg01"
     },
     {
-      title: "Expert",
+      title: "Expert", 
       description: "For teams and large organizations",
       price: "$499",
       period: "month",
       features: [
         "Unlimited reports",
         "White-label solution",
-        "Dedicated account manager",
+        "Dedicated account manager", 
         "Custom integrations",
         "Advanced analytics dashboard",
         "Unlimited team members",
@@ -61,22 +61,20 @@ export default function Pricing() {
         "Custom training sessions",
         "Data export automation"
       ],
-      buttonText: "Start 14-Day Free Trial",
-      popular: false
+      buttonText: "Start Subscription",
+      popular: false,
+      link: "https://buy.stripe.com/example"
     }
   ];
 
   const handlePlanSelect = (planTitle: string) => {
     console.log(`Selected plan: ${planTitle}`);
-    // Redirect to auth page with plan selection
     const planParam = planTitle.toLowerCase().replace(/[^a-z0-9]/g, '_');
     
     if (user) {
-      // If already logged in, go to payment info to complete trial setup
-      window.location.href = `/payment-info?plan=${planParam}&trial=true`;
+      window.location.href = `/payment-info?plan=${planParam}`;
     } else {
-      // If not logged in, go to auth page first
-      window.location.href = `/auth?plan=${planParam}&trial=true`;
+      window.location.href = `/auth?plan=${planParam}`;
     }
   };
 
@@ -119,12 +117,12 @@ export default function Pricing() {
             Choose Your Plan
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
-            Start with our 14-day free trial on any plan. No commitment required. 
-            Payment information needed to activate your trial.
+            Start with your free 14-day trial! Generate reports immediately after signing up. 
+            Choose a plan when you're ready for unlimited access.
           </p>
-          <div className="bg-blue-100 border border-blue-200 rounded-lg p-4 max-w-2xl mx-auto">
-            <p className="text-blue-800 font-medium">
-              🎉 All plans include a 14-day free trial with full access to features
+          <div className="bg-green-100 border border-green-200 rounded-lg p-4 max-w-2xl mx-auto">
+            <p className="text-green-800 font-medium">
+              🎉 New users get 14 days free - no credit card required at signup!
             </p>
           </div>
         </div>
@@ -140,29 +138,29 @@ export default function Pricing() {
           ))}
         </div>
 
-        {/* Trial Information */}
+        {/* Free Trial Information */}
         <div className="mt-16 text-center max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">How the Free Trial Works</h2>
+          <h2 className="text-2xl font-bold mb-6">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="text-3xl mb-4">📝</div>
-              <h3 className="font-semibold mb-2">1. Sign Up</h3>
-              <p className="text-muted-foreground text-sm">
-                Create your account and provide payment information to start your trial
-              </p>
-            </div>
-            <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="text-3xl mb-4">🚀</div>
-              <h3 className="font-semibold mb-2">2. Explore Features</h3>
+              <h3 className="font-semibold mb-2">1. Sign Up Free</h3>
               <p className="text-muted-foreground text-sm">
-                Access all premium features for 14 days with no restrictions
+                Create your account with just email and password - no credit card needed
               </p>
             </div>
             <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="text-3xl mb-4">✅</div>
-              <h3 className="font-semibold mb-2">3. Decide</h3>
+              <div className="text-3xl mb-4">📊</div>
+              <h3 className="font-semibold mb-2">2. Generate Reports</h3>
               <p className="text-muted-foreground text-sm">
-                Continue with your plan or cancel before the trial ends
+                Start analyzing properties immediately with your 14-day free trial
+              </p>
+            </div>
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <div className="text-3xl mb-4">💳</div>
+              <h3 className="font-semibold mb-2">3. Choose Payment</h3>
+              <p className="text-muted-foreground text-sm">
+                When ready, choose between monthly subscription or pay-per-report
               </p>
             </div>
           </div>
@@ -173,24 +171,22 @@ export default function Pricing() {
           <h2 className="text-2xl font-bold mb-8">Frequently Asked Questions</h2>
           <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
             <div>
-              <h3 className="font-semibold mb-2">Why do you need payment information for the trial?</h3>
+              <h3 className="font-semibold mb-2">Do I need a credit card to sign up?</h3>
               <p className="text-muted-foreground">
-                Payment information ensures a seamless transition after your trial. 
-                You won't be charged until the 14-day trial period ends.
+                No! You can sign up and use the 14-day free trial without any payment information.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">Can I cancel during the trial?</h3>
+              <h3 className="font-semibold mb-2">When do I need to pay?</h3>
               <p className="text-muted-foreground">
-                Yes! You can cancel anytime during your 14-day trial 
-                with no charges or commitment.
+                Only when your free trial ends and you want to generate more reports. 
+                Choose subscription or pay-per-report then.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">What happens after the trial?</h3>
+              <h3 className="font-semibold mb-2">Can I cancel anytime?</h3>
               <p className="text-muted-foreground">
-                After 14 days, you'll be charged for your selected plan. 
-                You can change or cancel your subscription at any time.
+                Yes! Subscriptions can be cancelled anytime. Pay-per-report has no commitment.
               </p>
             </div>
             <div>
