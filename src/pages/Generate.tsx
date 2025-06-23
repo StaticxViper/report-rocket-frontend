@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -11,12 +11,40 @@ import { ReportResults } from '@/components/generate/ReportResults';
 import { PaymentModal } from '@/components/PaymentModal';
 
 export default function Generate() {
-  const { user, isTrialActive, hasActiveSubscription } = useAuth();
+  const { user, isTrialActive, hasActiveSubscription, userProfile } = useAuth();
   const [isGenerating, setIsGenerating] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [generatedReport, setGeneratedReport] = useState<any>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<PropertyFormData | null>(null);
+
+  // Check for success/cancel parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const canceled = urlParams.get('canceled');
+
+    if (success === 'true') {
+      toast.success('Payment successful! Your subscription is now active.');
+      // Refresh subscription status
+      refreshSubscriptionStatus();
+      // Clear URL parameters
+      window.history.replaceState({}, '', '/generate');
+    } else if (canceled === 'true') {
+      toast.info('Payment was canceled.');
+      // Clear URL parameters
+      window.history.replaceState({}, '', '/generate');
+    }
+  }, []);
+
+  const refreshSubscriptionStatus = async () => {
+    try {
+      await supabase.functions.invoke('check-subscription');
+      // The auth context will be updated automatically
+    } catch (error) {
+      console.error('Error refreshing subscription status:', error);
+    }
+  };
 
   const checkAccessAndGenerate = async (data: PropertyFormData) => {
     if (!user) {
@@ -91,6 +119,17 @@ export default function Generate() {
 
       if (error) throw error;
 
+      // Update user's report count
+      if (userProfile) {
+        await supabase
+          .from('profiles')
+          .update({
+            reports_generated: (userProfile.reports_generated || 0) + 1,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', user!.id);
+      }
+
       setGeneratedReport(report);
       setIsComplete(true);
       toast.success('Investment analysis completed!');
@@ -105,8 +144,13 @@ export default function Generate() {
 
   const handlePaymentComplete = () => {
     if (pendingFormData) {
-      generateReport(pendingFormData);
-      setPendingFormData(null);
+      // Refresh subscription status first
+      refreshSubscriptionStatus();
+      // Generate report after a short delay to allow subscription status to update
+      setTimeout(() => {
+        generateReport(pendingFormData);
+        setPendingFormData(null);
+      }, 2000);
     }
   };
 

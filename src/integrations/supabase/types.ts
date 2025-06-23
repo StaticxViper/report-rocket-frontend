@@ -198,6 +198,27 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_tiers: {
+        Row: {
+          description: string | null
+          name: string
+          price_per_month: number | null
+          report_limit: number | null
+        }
+        Insert: {
+          description?: string | null
+          name: string
+          price_per_month?: number | null
+          report_limit?: number | null
+        }
+        Update: {
+          description?: string | null
+          name?: string
+          price_per_month?: number | null
+          report_limit?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -208,7 +229,7 @@ export type Database = {
         Returns: boolean
       }
       start_trial_period: {
-        Args: { user_id: string }
+        Args: { user_id: string } | { user_id: string; trial_tier?: string }
         Returns: undefined
       }
     }
