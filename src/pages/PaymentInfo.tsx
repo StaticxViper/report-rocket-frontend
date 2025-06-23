@@ -31,7 +31,7 @@ const paymentSchema = z.object({
 type PaymentFormData = z.infer<typeof paymentSchema>;
 
 export default function PaymentInfo() {
-  const { user, startTrial } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -81,12 +81,8 @@ export default function PaymentInfo() {
 
       if (error) throw error;
 
-      // Start the trial period
-      const { error: trialError } = await startTrial();
-      if (trialError) throw trialError;
-
       setIsComplete(true);
-      toast.success('Payment information saved and trial activated!');
+      toast.success('Payment information saved successfully!');
       
       // Redirect to dashboard after a short delay
       setTimeout(() => {
@@ -116,9 +112,9 @@ export default function PaymentInfo() {
           <Card className="max-w-md w-full text-center">
             <CardContent className="p-8">
               <CheckCircle2 className="h-16 w-16 text-green-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold mb-2">Trial Activated!</h2>
+              <h2 className="text-2xl font-bold mb-2">Payment Info Saved!</h2>
               <p className="text-muted-foreground mb-6">
-                Your payment information has been saved and your 14-day free trial is now active.
+                Your payment information has been saved successfully.
               </p>
               <Button onClick={() => navigate('/dashboard')} className="w-full">
                 Go to Dashboard
@@ -135,9 +131,9 @@ export default function PaymentInfo() {
       <div className="p-8">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">Activate Your Free Trial</h1>
+            <h1 className="text-3xl font-bold mb-2">Payment Information</h1>
             <p className="text-muted-foreground">
-              Add your payment information to start your 14-day free trial. You won't be charged until the trial ends.
+              Add your payment information for future transactions.
             </p>
           </div>
 
@@ -330,8 +326,7 @@ export default function PaymentInfo() {
                     <div className="text-sm">
                       <p className="font-medium">Secure & Encrypted</p>
                       <p className="text-muted-foreground">
-                        Your payment information is encrypted and stored securely. 
-                        You can cancel anytime during your trial.
+                        Your payment information is encrypted and stored securely.
                       </p>
                     </div>
                   </div>
@@ -342,7 +337,7 @@ export default function PaymentInfo() {
                     size="lg"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? 'Processing...' : 'Start Free Trial'}
+                    {isSubmitting ? 'Processing...' : 'Save Payment Information'}
                   </Button>
                 </form>
               </Form>
