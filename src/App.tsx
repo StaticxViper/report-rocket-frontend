@@ -9,6 +9,7 @@ import Generate from './pages/Generate';
 import Reports from './pages/Reports';
 import Pricing from './pages/Pricing';
 import Billing from './pages/Billing';
+import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
 import Auth from './pages/Auth';
 import About from './pages/About';
@@ -56,6 +57,7 @@ function App() {
             <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
             <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
             <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/payment-info" element={<ProtectedRoute><PaymentInfo /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>

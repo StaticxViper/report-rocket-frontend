@@ -1,6 +1,7 @@
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Home } from 'lucide-react';
 import { UseFormReturn } from 'react-hook-form';
@@ -17,10 +18,10 @@ export function BasicInfoSection({ form, isGenerating }: BasicInfoSectionProps) 
       <CardHeader>
         <CardTitle className="flex items-center">
           <Home className="h-5 w-5 mr-2" />
-          Basic Information
+          Property Details
         </CardTitle>
         <CardDescription>
-          Enter the fundamental property details
+          Enter the fundamental property information
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -53,6 +54,107 @@ export function BasicInfoSection({ form, isGenerating }: BasicInfoSectionProps) 
                     onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                     disabled={isGenerating}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="propertyType"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Property Type *</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isGenerating}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select property type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="single-family">Single Family</SelectItem>
+                    <SelectItem value="multi-family">Multi-Family</SelectItem>
+                    <SelectItem value="condo">Condominium</SelectItem>
+                    <SelectItem value="townhouse">Townhouse</SelectItem>
+                    <SelectItem value="commercial">Commercial</SelectItem>
+                    <SelectItem value="duplex">Duplex</SelectItem>
+                    <SelectItem value="apartment">Apartment Building</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="squareFootage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Square Footage</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="1500" 
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    disabled={isGenerating}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="numberOfUnits"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number of Units</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="1" 
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    disabled={isGenerating}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="yearBuilt"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year Built</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="number" 
+                    placeholder="1995" 
+                    {...field}
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                    disabled={isGenerating}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="zipCode"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Zip Code</FormLabel>
+                <FormControl>
+                  <Input placeholder="90210" {...field} disabled={isGenerating} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

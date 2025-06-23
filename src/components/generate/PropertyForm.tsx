@@ -8,6 +8,7 @@ import { PropertyFormData, propertySchema } from '@/types/property';
 import { BasicInfoSection } from './BasicInfoSection';
 import { IncomeExpensesSection } from './IncomeExpensesSection';
 import { FinancingSection } from './FinancingSection';
+import { AdvancedSettingsSection } from './AdvancedSettingsSection';
 
 interface PropertyFormProps {
   onSubmit: (data: PropertyFormData) => void;
@@ -20,18 +21,31 @@ export function PropertyForm({ onSubmit, isGenerating }: PropertyFormProps) {
     defaultValues: {
       propertyAddress: '',
       purchasePrice: 0,
+      propertyType: '',
+      squareFootage: 0,
+      numberOfUnits: 1,
+      yearBuilt: 0,
+      zipCode: '',
       capRate: 0,
       monthlyRent: 0,
+      rentPerSqft: 0,
+      otherMonthlyIncome: 0,
       annualPropertyTaxes: 0,
       annualInsurance: 0,
       hoaFees: 0,
       maintenanceCosts: 0,
+      maintenanceReserves: 0,
       vacancyRate: 5,
       propertyMgmtFee: 10,
+      utilities: 0,
       loanAmount: 0,
       interestRate: 0,
       loanTermYears: 30,
       downPayment: 0,
+      closingCosts: 0,
+      originationFees: 0,
+      interestOnlyPeriod: 0,
+      isAdjustableRate: false,
       otherExpenses: 0,
     },
   });
@@ -42,6 +56,7 @@ export function PropertyForm({ onSubmit, isGenerating }: PropertyFormProps) {
         <BasicInfoSection form={form} isGenerating={isGenerating} />
         <IncomeExpensesSection form={form} isGenerating={isGenerating} />
         <FinancingSection form={form} isGenerating={isGenerating} />
+        <AdvancedSettingsSection form={form} isGenerating={isGenerating} />
 
         <Button 
           type="submit" 

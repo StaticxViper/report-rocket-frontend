@@ -1,4 +1,3 @@
-
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -191,7 +190,7 @@ export default function Billing() {
             </CardContent>
           </Card>
 
-          {/* Usage Stats */}
+          {/* Usage Stats - Updated to remove Success Rate */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -203,7 +202,7 @@ export default function Billing() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="text-center">
                   <Calendar className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <div className="text-2xl font-bold">24</div>
@@ -213,11 +212,6 @@ export default function Billing() {
                   <FileText className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                   <div className="text-2xl font-bold">18</div>
                   <div className="text-sm text-muted-foreground">PDF Downloads</div>
-                </div>
-                <div className="text-center">
-                  <CheckCircle2 className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                  <div className="text-2xl font-bold">98%</div>
-                  <div className="text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
             </CardContent>

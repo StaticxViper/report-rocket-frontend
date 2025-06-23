@@ -15,6 +15,12 @@ export default function Settings() {
   const [showPassword, setShowPassword] = useState(false);
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(false);
+  
+  // Notification preferences
+  const [reportUpdates, setReportUpdates] = useState(true);
+  const [billingNotifications, setBillingNotifications] = useState(true);
+  const [errorAlerts, setErrorAlerts] = useState(true);
+  const [marketingEmails, setMarketingEmails] = useState(false);
 
   const handleSave = () => {
     console.log('Saving settings...');
@@ -173,23 +179,55 @@ export default function Settings() {
               <Separator />
               
               <div className="space-y-4">
-                <Label className="text-base">Notification Types</Label>
+                <Label className="text-base">Notification Preferences</Label>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Report completion</span>
-                    <Switch defaultChecked />
+                    <div className="space-y-0.5">
+                      <span className="text-sm font-medium">Monthly Report Updates</span>
+                      <p className="text-xs text-muted-foreground">
+                        Updates for properties in your favorites
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={reportUpdates}
+                      onCheckedChange={setReportUpdates}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Account updates</span>
-                    <Switch defaultChecked />
+                    <div className="space-y-0.5">
+                      <span className="text-sm font-medium">Billing Notifications</span>
+                      <p className="text-xs text-muted-foreground">
+                        Billing cycle and payment reminders
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={billingNotifications}
+                      onCheckedChange={setBillingNotifications}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Billing notifications</span>
-                    <Switch defaultChecked />
+                    <div className="space-y-0.5">
+                      <span className="text-sm font-medium">Error Alerts</span>
+                      <p className="text-xs text-muted-foreground">
+                        Payment failures and system issues
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={errorAlerts}
+                      onCheckedChange={setErrorAlerts}
+                    />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm">Marketing emails</span>
-                    <Switch />
+                    <div className="space-y-0.5">
+                      <span className="text-sm font-medium">Marketing Emails</span>
+                      <p className="text-xs text-muted-foreground">
+                        Product updates and promotional content
+                      </p>
+                    </div>
+                    <Switch 
+                      checked={marketingEmails}
+                      onCheckedChange={setMarketingEmails}
+                    />
                   </div>
                 </div>
               </div>
