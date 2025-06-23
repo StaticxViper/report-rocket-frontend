@@ -14,7 +14,7 @@ interface PricingCardProps {
   popular?: boolean;
   buttonText: string;
   onSelect: () => void;
-  link: string;
+  planType: string;
 }
 
 export function PricingCard({
@@ -26,7 +26,7 @@ export function PricingCard({
   popular = false,
   buttonText,
   onSelect,
-  link
+  planType
 }: PricingCardProps) {
   return (
     <Card className={cn(
@@ -57,19 +57,13 @@ export function PricingCard({
         </ul>
       </CardContent>
       <CardFooter>
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full"
+        <Button 
+          onClick={onSelect}
+          className="w-full" 
+          variant={popular ? "default" : "outline"}
         >
-          <Button 
-            className="w-full" 
-            variant={popular ? "default" : "outline"}
-          >
-            {buttonText}
-          </Button>
-        </a>
+          {buttonText}
+        </Button>
       </CardFooter>
     </Card>
   );

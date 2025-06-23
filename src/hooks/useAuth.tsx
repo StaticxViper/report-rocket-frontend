@@ -9,7 +9,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   userProfile: any | null;
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, firstName: string, lastName: string, selectedPlan?: string) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   isTrialActive: () => Promise<boolean>;
@@ -47,7 +47,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               // If this is a new user (no profile or trial not started), start trial
               if (profile && !profile.trial_start_date) {
                 console.log('Starting free trial for new user');
-                await startFreeTrial();
+                
+                // Check if there's a selected plan in URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const selectedPlan = urlParams.get('plan');
+                
+                let trialTier = 'pro'; // default to pro
+                if (selectedPlan === 'expert') {
+                  trialTier = 'expert';
+                } else if (selectedPlan === 'pay_per_report') {
+                  trialTier = 'pro'; // Even pay-per-report users get pro trial
+                }
+                
+                await startFreeTrial(trialTier);
               }
             } catch (error) {
               console.error('Error fetching user profile:', error);
@@ -71,12 +83,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const startFreeTrial = async () => {
+  const startFreeTrial = async (trialTier: string = 'pro') => {
     if (!user) return;
 
     try {
       const { error } = await supabase.rpc('start_trial_period', {
-        user_id: user.id
+        user_id: user.id,
+        trial_tier: trialTier
       });
 
       if (!error) {
@@ -93,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signUp = async (email: string, password: string, firstName: string, lastName: string, selectedPlan?: string) => {
     try {
       cleanupAuthState();
       
@@ -103,7 +116,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log('Sign out during signup failed, continuing...');
       }
 
-      const redirectUrl = `${window.location.origin}/dashboard`;
+      const redirectUrl = selectedPlan 
+        ? `${window.location.origin}/dashboard?plan=${selectedPlan}`
+        : `${window.location.origin}/dashboard`;
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -113,6 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           data: {
             first_name: firstName,
             last_name: lastName,
+            selected_plan: selectedPlan
           }
         }
       });
@@ -121,7 +137,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { error: null };
       } else if (!error && data.user && data.user.email_confirmed_at) {
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          window.location.href = redirectUrl;
         }, 100);
       }
 
@@ -147,8 +163,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (!error && data.user) {
+        // Check if there's a plan parameter to redirect to
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedPlan = urlParams.get('plan');
+        const redirectUrl = selectedPlan 
+          ? `/dashboard?plan=${selectedPlan}`
+          : '/dashboard';
+          
         setTimeout(() => {
-          window.location.href = '/dashboard';
+          window.location.href = redirectUrl;
         }, 100);
       }
 

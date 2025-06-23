@@ -10,29 +10,29 @@ export default function Pricing() {
 
   const plans = [
     {
-      title: "Pay-per-Report",
-      description: "Perfect for occasional property analysis",
-      price: "$49",
+      title: "Pay-Per-Report",
+      description: "Ideal for one-time or occasional use",
+      price: "$5",
       period: "per report",
       features: [
+        "No monthly fee",
         "Professional property analysis",
         "Market comparison data", 
         "Investment metrics",
         "PDF export",
-        "Email support",
-        "No monthly commitment"
+        "Email support"
       ],
-      buttonText: "Buy Single Report",
+      buttonText: "Get Started",
       popular: false,
-      link: "https://buy.stripe.com/9B6cMY9LycXfeWV8a5asg02"
+      planType: "pay_per_report"
     },
     {
-      title: "Pro",
-      description: "For active real estate professionals",
-      price: "$199",
+      title: "Pro Subscription",
+      description: "Best for growing investors who run frequent numbers",
+      price: "$25",
       period: "month",
       features: [
-        "50 reports per month",
+        "Up to 150 reports per month",
         "Advanced market analysis",
         "Custom branding",
         "Priority support",
@@ -41,14 +41,14 @@ export default function Pricing() {
         "Advanced export options",
         "Historical data trends"
       ],
-      buttonText: "Start Subscription",
+      buttonText: "Start Free Trial",
       popular: true,
-      link: "https://buy.stripe.com/4gM00ccXK6yR3eddupasg01"
+      planType: "pro"
     },
     {
-      title: "Expert", 
-      description: "For teams and large organizations",
-      price: "$499",
+      title: "Expert Subscription", 
+      description: "For professionals and high-volume investors",
+      price: "$50",
       period: "month",
       features: [
         "Unlimited reports",
@@ -61,20 +61,21 @@ export default function Pricing() {
         "Custom training sessions",
         "Data export automation"
       ],
-      buttonText: "Start Subscription",
+      buttonText: "Start Free Trial",
       popular: false,
-      link: "https://buy.stripe.com/example"
+      planType: "expert"
     }
   ];
 
-  const handlePlanSelect = (planTitle: string) => {
-    console.log(`Selected plan: ${planTitle}`);
-    const planParam = planTitle.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  const handlePlanSelect = (planType: string) => {
+    console.log(`Selected plan: ${planType}`);
     
     if (user) {
-      window.location.href = `/payment-info?plan=${planParam}`;
+      // User is logged in, redirect to dashboard with plan selection
+      window.location.href = `/dashboard?plan=${planType}`;
     } else {
-      window.location.href = `/auth?plan=${planParam}`;
+      // User not logged in, redirect to auth with plan selection
+      window.location.href = `/auth?plan=${planType}`;
     }
   };
 
@@ -133,7 +134,7 @@ export default function Pricing() {
             <PricingCard
               key={plan.title}
               {...plan}
-              onSelect={() => handlePlanSelect(plan.title)}
+              onSelect={() => handlePlanSelect(plan.planType)}
             />
           ))}
         </div>
@@ -151,16 +152,16 @@ export default function Pricing() {
             </div>
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="text-3xl mb-4">📊</div>
-              <h3 className="font-semibold mb-2">2. Generate Reports</h3>
+              <h3 className="font-semibold mb-2">2. Start 14-Day Trial</h3>
               <p className="text-muted-foreground text-sm">
-                Start analyzing properties immediately with your 14-day free trial
+                Begin your free trial of the plan you selected and generate reports immediately
               </p>
             </div>
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <div className="text-3xl mb-4">💳</div>
               <h3 className="font-semibold mb-2">3. Choose Payment</h3>
               <p className="text-muted-foreground text-sm">
-                When ready, choose between monthly subscription or pay-per-report
+                When trial ends, continue with subscription or pay-per-report
               </p>
             </div>
           </div>
@@ -190,10 +191,10 @@ export default function Pricing() {
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-2">How accurate are the reports?</h3>
+              <h3 className="font-semibold mb-2">What happens after my trial?</h3>
               <p className="text-muted-foreground">
-                Our reports use the latest market data and have a 98.5% 
-                accuracy rate based on third-party verification.
+                You'll need to choose a payment method to continue generating reports. 
+                All payments are managed in your dashboard.
               </p>
             </div>
           </div>

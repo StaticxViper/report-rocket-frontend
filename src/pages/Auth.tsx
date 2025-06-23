@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 export default function Auth() {
   const [searchParams] = useSearchParams();
   const initialMode = searchParams.get('mode') === 'signup' ? false : true;
+  const selectedPlan = searchParams.get('plan');
   const [isLogin, setIsLogin] = useState(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,9 +31,23 @@ export default function Auth() {
   // Redirect authenticated users to dashboard
   useEffect(() => {
     if (user) {
-      navigate('/dashboard');
+      const dashboardUrl = selectedPlan ? `/dashboard?plan=${selectedPlan}` : '/dashboard';
+      navigate(dashboardUrl);
     }
-  }, [user, navigate]);
+  }, [user, navigate, selectedPlan]);
+
+  const getPlanDisplayName = (planType: string) => {
+    switch (planType) {
+      case 'pay_per_report':
+        return 'Pay-Per-Report';
+      case 'pro':
+        return 'Pro Subscription';
+      case 'expert':
+        return 'Expert Subscription';
+      default:
+        return 'Selected Plan';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,7 +79,9 @@ export default function Auth() {
         } else {
           toast({
             title: "Account created!",
-            description: "Please check your email to verify your account if required.",
+            description: selectedPlan 
+              ? `Your 14-day trial of ${getPlanDisplayName(selectedPlan)} will begin once you verify your email.`
+              : "Please check your email to verify your account if required.",
           });
         }
       }
@@ -121,6 +138,16 @@ export default function Auth() {
                 : 'Start generating professional property reports'
               }
             </CardDescription>
+            {selectedPlan && !isLogin && (
+              <div className="bg-blue-100 border border-blue-200 rounded-lg p-3 mt-4">
+                <p className="text-blue-800 text-sm font-medium">
+                  Selected: {getPlanDisplayName(selectedPlan)}
+                </p>
+                <p className="text-blue-600 text-xs">
+                  14-day free trial included
+                </p>
+              </div>
+            )}
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
@@ -189,7 +216,7 @@ export default function Auth() {
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                     <Check className="h-3 w-3 text-green-600" />
-                    <span>Free 7-day trial included</span>
+                    <span>Free 14-day trial included</span>
                   </div>
                 </div>
               )}
